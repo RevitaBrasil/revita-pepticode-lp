@@ -51,6 +51,7 @@ window.RVT = {
   }
 })(window.RVT);
 </script>
+<script>document.documentElement.className+=' rv-js';</script>
 
 <style>
   :root{
@@ -347,6 +348,86 @@ window.RVT = {
     .modal{padding:38px 26px 30px}
     .cta{width:100%;text-align:center;padding:19px 20px}
     .hero-fig figcaption{font-size:12.5px;padding:11px 15px}
+  }
+
+  /* ================= camada de movimento (aditiva) ================= */
+
+  /* 1. reveal na entrada — estado inicial só existe se o JS estiver vivo */
+  html.rv-js :is(
+    .hero .tag, .hero h1, .hero .lede, .hero .cta, .hero .reassure, .hero-fig,
+    .enemy h2, .enemy-body, .drop, .fails li, .fails-note,
+    .code-fig, .code h2, .code-lede, .moves li, .single, .final,
+    .close h2, .close p, .close .cta
+  ){
+    opacity:0; transform:translate3d(0,18px,0);
+    transition:opacity .72s cubic-bezier(.22,.72,.28,1), transform .72s cubic-bezier(.22,.72,.28,1);
+  }
+  html.rv-js .rv-in{opacity:1 !important; transform:none !important}
+
+  /* 2. fundo vivo — dois radiais em deriva lenta, só transform (composited) */
+  .rv-live{position:relative; overflow:hidden}
+  .rv-live > .rv-aura{
+    position:absolute; inset:-30%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(34% 42% at 24% 28%, rgba(43,74,150,.62) 0%, rgba(43,74,150,0) 70%),
+      radial-gradient(30% 38% at 76% 66%, rgba(198,165,92,.15) 0%, rgba(198,165,92,0) 72%),
+      radial-gradient(26% 30% at 58% 12%, rgba(22,41,92,.55) 0%, rgba(22,41,92,0) 74%);
+    filter:blur(26px);
+    animation:rv-drift 38s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+  .rv-live > .wrap{position:relative; z-index:1}
+  @keyframes rv-drift{
+    0%  {transform:translate3d(-3%,-2%,0) scale(1)}
+    50% {transform:translate3d(2.5%,3%,0)  scale(1.09)}
+    100%{transform:translate3d(4%,-2.5%,0) scale(1.04)}
+  }
+  /* grão fino, estático — tira o aspecto de gradiente "chapado" */
+  .rv-live > .rv-aura::after{
+    content:""; position:absolute; inset:0; opacity:.35; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+  /* 3. o fio do sinal marca o progresso da página */
+  .signal{opacity:.42; z-index:39; transition:opacity .4s ease}  /* z-index original (1) ficava atrás das seções: o fio nunca aparecia */
+  .signal::after{
+    content:""; position:absolute; left:50%; top:0;
+    width:5px; height:5px; margin-left:-2.5px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 12px 3px rgba(198,165,92,.55);
+    transform:translate3d(0, calc(var(--rv-p,0) * (100vh - 5px)), 0);
+  }
+
+  /* 4. parallax leve no frasco */
+  .hero-fig img{transform:translate3d(0,var(--rv-y,0px),0); will-change:transform}
+
+  /* 5. microinterações */
+  .cta:active,.submit:active{transform:translateY(0) scale(.985)}
+  .field input:focus{border-color:var(--gold); box-shadow:0 0 0 3px rgba(198,165,92,.2)}
+  .submit{position:relative}
+  .submit[disabled]::after{
+    content:""; position:absolute; top:50%; right:22px; width:15px; height:15px; margin-top:-7.5px;
+    border-radius:50%; border:2px solid rgba(244,241,236,.3); border-top-color:var(--porcelain);
+    animation:rv-spin .7s linear infinite;
+  }
+  @keyframes rv-spin{to{transform:rotate(360deg)}}
+
+  /* 6. brilho que percorre o CTA principal */
+  .cta{position:relative; overflow:hidden}
+  .cta::after{
+    content:""; position:absolute; top:-20%; left:-65%; width:38%; height:140%;
+    background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0));
+    transform:skewX(-18deg); pointer-events:none;
+    animation:rv-sheen 7s ease-in-out infinite;
+  }
+  .cta.dark::after{background:linear-gradient(100deg,rgba(227,210,168,0),rgba(227,210,168,.28),rgba(227,210,168,0))}
+  @keyframes rv-sheen{0%,74%{left:-65%} 100%{left:135%}}
+
+  @media (prefers-reduced-motion: reduce){
+    .rv-live > .rv-aura, .cta::after, .submit[disabled]::after{animation:none}
+    .hero-fig img{transform:none}
+    html.rv-js :is(.hero .tag,.hero h1,.hero .lede,.hero .cta,.hero .reassure,.hero-fig,
+      .enemy h2,.enemy-body,.drop,.fails li,.fails-note,.code-fig,.code h2,.code-lede,
+      .moves li,.single,.final,.close h2,.close p,.close .cta){opacity:1;transform:none}
   }
 </style>
 </head>
@@ -665,6 +746,105 @@ window.RVT = {
       if (ev.key === 'Enter') document.getElementById('go').click();
     });
   });
+})();
+</script>
+<script>
+/* ---------- camada de movimento: reveal, progresso, parallax, contagem ---------- */
+(function () {
+  var d = document, root = d.documentElement;
+  var reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* fundo vivo: injeta a camada de aura nas seções escuras */
+  ['.hero', '.code'].forEach(function (sel) {
+    var s = d.querySelector(sel);
+    if (!s) return;
+    s.classList.add('rv-live');
+    var a = d.createElement('div');
+    a.className = 'rv-aura';
+    a.setAttribute('aria-hidden', 'true');
+    s.insertBefore(a, s.firstChild);
+  });
+
+  if (reduz || !('IntersectionObserver' in window)) return;
+
+  /* reveal com stagger por grupo */
+  var grupos = [
+    ['.hero .tag', '.hero h1', '.hero .lede', '.hero .cta', '.hero .reassure'],
+    ['.hero-fig'],
+    ['.enemy h2', '.enemy-body', '.drop'],
+    ['.fails li', '.fails-note'],
+    ['.code-fig'],
+    ['.code h2', '.code-lede', '.moves li', '.single', '.final'],
+    ['.close h2', '.close p', '.close .cta']
+  ];
+
+  var io = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('rv-in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+  grupos.forEach(function (g) {
+    var i = 0;
+    g.forEach(function (sel) {
+      Array.prototype.forEach.call(d.querySelectorAll(sel), function (el) {
+        el.style.transitionDelay = (i * 85) + 'ms';
+        i++;
+        io.observe(el);
+      });
+    });
+  });
+
+  /* contagem do 60% quando a estatística entra em cena */
+  var num = d.querySelector('.drop-num');
+  if (num) {
+    var bruto = num.textContent.trim();
+    var alvo = parseInt(bruto.replace(/\D/g, ''), 10);
+    if (alvo > 0) {
+      var sufixo = bruto.replace(/[0-9]/g, '');
+      var ioNum = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        ioNum.disconnect();
+        var t0 = null;
+        function loop(agora) {
+          if (t0 === null) t0 = agora;
+          var p = Math.min((agora - t0) / 1100, 1);
+          var e = 1 - Math.pow(1 - p, 3);
+          num.textContent = Math.round(alvo * e) + sufixo;
+          if (p < 1) requestAnimationFrame(loop);
+        }
+        num.textContent = '0' + sufixo;
+        requestAnimationFrame(loop);
+      }, { threshold: 0.6 });
+      ioNum.observe(num);
+    }
+  }
+
+  /* progresso no fio do sinal + parallax do frasco, num único rAF */
+  var fio = d.querySelector('.signal');
+  var frasco = d.querySelector('.hero-fig img');
+  var pendente = false;
+
+  function pintar() {
+    pendente = false;
+    var h = d.documentElement.scrollHeight - window.innerHeight;
+    var y = window.pageYOffset || d.documentElement.scrollTop || 0;
+    if (fio) fio.style.setProperty('--rv-p', h > 0 ? Math.min(y / h, 1).toFixed(4) : 0);
+    if (frasco) {
+      var desl = Math.max(Math.min(y * -0.055, 0), -34);
+      frasco.style.setProperty('--rv-y', desl.toFixed(1) + 'px');
+    }
+  }
+  function agendar() {
+    if (pendente) return;
+    pendente = true;
+    requestAnimationFrame(pintar);
+  }
+  window.addEventListener('scroll', agendar, { passive: true });
+  window.addEventListener('resize', agendar, { passive: true });
+  pintar();
 })();
 </script>
 </body>
