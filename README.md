@@ -5,8 +5,22 @@ dia **24/09 às 20h**. Arquivo único e autocontido: `index.html`.
 
 ## No ar
 
-- **GitHub Pages** — https://operacaorevitaderma-design.github.io/revita-pepticode-lp/
+- **Produção** — https://lp.revitaderma.com.br
 - **Preview direto** — https://raw.githack.com/operacaorevitaderma-design/revita-pepticode-lp/main/index.html
+
+`revitaderma.com.br` (raiz e `www`) é do Shopify. Esta LP vive só no subdomínio `lp.`,
+servida pelo GitHub Pages a partir da `main`.
+
+### Como o domínio está ligado
+
+| Onde | Registro | Valor |
+|---|---|---|
+| GoDaddy (DNS) | `CNAME` `lp` | `operacaorevitaderma-design.github.io` |
+| Este repo | `CNAME` (arquivo) | `lp.revitaderma.com.br` |
+| GitHub | Settings → Pages | branch `main`, `/ (root)`, Enforce HTTPS ligado |
+
+O arquivo `CNAME` na raiz do repo é o que mantém o domínio depois de cada push —
+se ele sumir, o Pages volta pro endereço `github.io` e o subdomínio cai.
 
 Para ligar o Pages: Settings → Pages → Source `Deploy from a branch` → Branch `main` → `/ (root)`.
 
