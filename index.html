@@ -703,6 +703,25 @@ window.RVT = {
     btn.disabled = true;
     btn.textContent = 'Enviando...';
 
+    // Um unico event_id para os dois caminhos: o fbq do navegador e o
+    // Conversions API do servidor. O Meta junta os dois e conta uma conversao.
+    var eventId = (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'ev-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+
+    function cookie(nome) {
+      var m = document.cookie.match('(^|; )' + nome + '=([^;]*)');
+      return m ? decodeURIComponent(m[2]) : '';
+    }
+    // Se o pixel nao carregou (bloqueador), o _fbc nao existe — mas o fbclid
+    // da URL existe, e da para montar o _fbc no formato que o Meta espera.
+    function clique() {
+      var c = cookie('_fbc');
+      if (c) return c;
+      var id = new URLSearchParams(location.search).get('fbclid');
+      return id ? 'fb.1.' + Date.now() + '.' + id : '';
+    }
+
     var lead = {
       nome: nome.value.trim(),
       email: email.value.trim().toLowerCase(),
@@ -712,7 +731,10 @@ window.RVT = {
       evento: '24/09 20h',
       utm: location.search,
       pagina: location.href,
-      ts: new Date().toISOString()
+      ts: new Date().toISOString(),
+      event_id: eventId,
+      fbp: cookie('_fbp'),
+      fbc: clique()
     };
 
     function concluir(enviado) {
@@ -732,7 +754,10 @@ window.RVT = {
       document.getElementById('formView').style.display = 'none';
       document.getElementById('doneView').classList.add('show');
 
-      if (window.fbq)  { fbq('track', 'Lead'); fbq('track', 'CompleteRegistration'); }
+      if (window.fbq) {
+        fbq('track', 'Lead', {content_name: 'Grupo VIP Pepti Code'}, {eventID: eventId});
+        fbq('track', 'CompleteRegistration', {}, {eventID: eventId + '-cr'});
+      }
       if (window.gtag) { gtag('event', 'generate_lead'); gtag('event', 'sign_up'); }
 
       btn.disabled = false;
