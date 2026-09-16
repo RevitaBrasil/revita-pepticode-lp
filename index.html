@@ -23,13 +23,17 @@ window.RVT = {
 
   /* 3 · rastreamento DA REVITA. Nunca os IDs da Botanika: rodar skincare
          no pixel dela contamina o aprendizado das duas contas. */
-  META_PIXEL: '',
+  META_PIXEL: '1130249139559229',
 
   /* 4 · Google Tag Manager. O GA4 NÃO vai aqui embaixo: configure o GA4
          dentro do container. Se ficar nos dois lugares, cada pageview é
          contado duas vezes. Mesma regra vale para o pixel do Meta — ele
          é fixo no HTML, nunca uma tag do GTM. */
   GTM: 'GTM-T6P8LPH8',
+
+  /* 5 · GA4 fica VAZIO de propósito. A propriedade existe (G-RJBTKEDJNR),
+         mas o ID vai na tag "GA4 - Base" dentro do container, não aqui.
+         Nos dois lugares = cada pageview contado duas vezes. */
   GA4: '',
 
   /* data e hora do encontro */
