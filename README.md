@@ -31,12 +31,31 @@ Preencher o bloco `window.RVT`, no topo do `index.html`:
 | Chave | O que é |
 |---|---|
 | `GRUPO_WHATSAPP` | link do grupo (`https://chat.whatsapp.com/…`) |
-| `ENDPOINT` | webhook que recebe o lead (ActiveCampaign, SendFlow ou n8n) |
+| `ENDPOINT` | Edge Function `captura-lead` do Supabase (projeto Revita CRM) — **já preenchido** |
 | `META_PIXEL` | ID do pixel **da Revita** — nunca o de outra marca do grupo |
 | `GA4` | ID de medição |
 
 Vazio significa desligado: a página continua funcionando, avisa no console o que
 falta, e o lead fica numa fila local que é reenviada sozinha quando o endpoint existir.
+
+## Onde a lead cai
+
+`formulario` → `POST` na Edge Function `captura-lead` → tabela `public.leads`
+(projeto Supabase **Revita CRM**, `xejbwyrqgktrqhhtavdh`).
+
+A função escreve com `service_role`, que nunca sai do servidor. A tabela tem RLS
+ligado e **nenhuma policy**: fora essa função, nada lê nem escreve. Por isso não
+há chave de banco neste repositório, que é público.
+
+A função também: normaliza nome e e-mail, converte o telefone para `+55DDDNNNNNNNN`
+(sem quebrar DDD 55, do Rio Grande do Sul), separa os UTMs em colunas, deduplica
+por e-mail via upsert — quem preenche duas vezes atualiza a própria linha e mantém
+a data da primeira inscrição — e descarta bot pelo campo isca `#site-url`.
+
+Se a função estiver fora do ar, o `enviar()` da página guarda a lead em
+`localStorage` e reenvia sozinho no próximo carregamento. A tela de sucesso
+aparece de qualquer jeito: falha de webhook nunca pode bloquear a pessoa de
+entrar no grupo.
 
 ## Estrutura
 

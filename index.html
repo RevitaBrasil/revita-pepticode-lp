@@ -19,7 +19,7 @@ window.RVT = {
   /* 2 · webhook que recebe o lead (ActiveCampaign, SendFlow ou n8n).
          Enquanto vazio, o lead fica guardado no navegador e é reenviado
          sozinho assim que o endereço existir. */
-  ENDPOINT: '',
+  ENDPOINT: 'https://xejbwyrqgktrqhhtavdh.supabase.co/functions/v1/captura-lead',
 
   /* 3 · rastreamento DA REVITA. Nunca os IDs da Botanika: rodar skincare
          no pixel dela contamina o aprendizado das duas contas. */
@@ -301,6 +301,8 @@ window.RVT = {
   .close-x:focus-visible{outline:2px solid var(--navy-600);outline-offset:2px}
 
   .field{margin-bottom:17px}
+  /* isca anti-bot: fora da tela, fora do tab, invisivel pro leitor de tela */
+  .isca{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
   .field label{display:block;font-size:13.5px;color:#55554F;margin-bottom:7px}
   .field input{
     width:100%;padding:14px 15px;font-family:'Karla',sans-serif;font-size:16px;color:var(--ink);
@@ -553,6 +555,11 @@ window.RVT = {
       <h2 id="mt">Entre no grupo VIP</h2>
       <p class="m-sub">Preencha abaixo e você recebe o link do encontro do dia 24/09, às 20h.</p>
 
+      <div class="isca" aria-hidden="true">
+        <label for="site-url">Não preencha este campo</label>
+        <input id="site-url" type="text" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
       <div class="field">
         <label for="nome">Nome</label>
         <input id="nome" type="text" autocomplete="given-name" placeholder="Como você quer ser chamada">
@@ -700,6 +707,7 @@ window.RVT = {
       nome: nome.value.trim(),
       email: email.value.trim().toLowerCase(),
       whatsapp: '+55' + digits,
+      website: document.getElementById('site-url').value,
       origem: 'lp-lista-espera-pepticode',
       evento: '24/09 20h',
       utm: location.search,
