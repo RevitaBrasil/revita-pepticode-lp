@@ -24,6 +24,12 @@ window.RVT = {
   /* 3 · rastreamento DA REVITA. Nunca os IDs da Botanika: rodar skincare
          no pixel dela contamina o aprendizado das duas contas. */
   META_PIXEL: '',
+
+  /* 4 · Google Tag Manager. O GA4 NÃO vai aqui embaixo: configure o GA4
+         dentro do container. Se ficar nos dois lugares, cada pageview é
+         contado duas vezes. Mesma regra vale para o pixel do Meta — ele
+         é fixo no HTML, nunca uma tag do GTM. */
+  GTM: 'GTM-T6P8LPH8',
   GA4: '',
 
   /* data e hora do encontro */
@@ -31,6 +37,16 @@ window.RVT = {
 };
 
 (function (c) {
+  window.dataLayer = window.dataLayer || [];
+
+  if (c.GTM) {
+    dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var t = document.createElement('script');
+    t.async = true;
+    t.src = 'https://www.googletagmanager.com/gtm.js?id=' + c.GTM;
+    document.head.appendChild(t);
+  }
+
   if (c.META_PIXEL) {
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -434,6 +450,8 @@ window.RVT = {
 </style>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T6P8LPH8"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="signal" aria-hidden="true"></div>
 
@@ -651,6 +669,22 @@ window.RVT = {
   }
   tick(); setInterval(tick, 60000);
 
+  /* ---------- dataLayer: o GTM le daqui, nao do DOM ---------- */
+  function dl(evento, extras) {
+    var o = { event: evento };
+    for (var k in extras) if (extras.hasOwnProperty(k)) o[k] = extras[k];
+    (window.dataLayer = window.dataLayer || []).push(o);
+  }
+  function utms() {
+    var q = new URLSearchParams(location.search);
+    return {
+      utm_source:   q.get('utm_source')   || null,
+      utm_medium:   q.get('utm_medium')   || null,
+      utm_campaign: q.get('utm_campaign') || null,
+      utm_content:  q.get('utm_content')  || null
+    };
+  }
+
   var ov = document.getElementById('ov');
   var last = null;
 
@@ -658,6 +692,9 @@ window.RVT = {
     last = e && e.currentTarget ? e.currentTarget : null;
     ov.classList.add('open');
     document.body.style.overflow = 'hidden';
+    var sec = last && last.closest ? last.closest('header, section') : null;
+    // so a primeira classe: 'hero' ou 'code', sem as utilitarias da animacao
+    dl('form_open', { cta_local: sec ? (String(sec.className).split(' ')[0] || sec.tagName.toLowerCase()) : 'desconhecido' });
     setTimeout(function(){ document.getElementById('nome').focus(); }, 60);
   }
   function close(){
@@ -697,7 +734,14 @@ window.RVT = {
     var okNome  = flag(nome,  'e-nome',  nome.value.trim().length >= 2);
     var okMail  = flag(email, 'e-email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()));
     var okZap   = flag(zap,   'e-zap',   digits.length === 10 || digits.length === 11);
-    if (!(okNome && okMail && okZap)) return;
+    if (!(okNome && okMail && okZap)) {
+      var ruins = [];
+      if (!okNome) ruins.push('nome');
+      if (!okMail) ruins.push('email');
+      if (!okZap)  ruins.push('whatsapp');
+      dl('lead_erro_validacao', { campos: ruins.join(',') });
+      return;
+    }
 
     var btn = this;
     btn.disabled = true;
@@ -760,6 +804,13 @@ window.RVT = {
       }
       if (window.gtag) { gtag('event', 'generate_lead'); gtag('event', 'sign_up'); }
 
+      dl('lead_submit', Object.assign({
+        event_id: eventId,
+        origem: lead.origem,
+        evento: lead.evento,
+        enviado: !!enviado
+      }, utms()));
+
       btn.disabled = false;
       btn.textContent = 'Entrar no grupo VIP';
     }
@@ -774,6 +825,28 @@ window.RVT = {
   });
 
   /* enter envia */
+  /* profundidade de rolagem: numa pagina de captura, diz se a pessoa
+     chegou no segundo CTA ou desistiu na primeira dobra */
+  (function () {
+    var marcos = [25, 50, 75, 100], vistos = {}, pendente = false;
+    function medir() {
+      pendente = false;
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      if (h <= 0) return;
+      var pct = ((window.pageYOffset || document.documentElement.scrollTop) / h) * 100;
+      for (var i = 0; i < marcos.length; i++) {
+        var m = marcos[i];
+        if (pct >= m && !vistos[m]) { vistos[m] = 1; dl('scroll_depth', { profundidade: m }); }
+      }
+    }
+    window.addEventListener('scroll', function () {
+      if (pendente) return;
+      pendente = true;
+      requestAnimationFrame(medir);
+    }, { passive: true });
+    medir();
+  })();
+
   Array.prototype.forEach.call(document.querySelectorAll('#formView input'), function(i){
     i.addEventListener('keydown', function(ev){
       if (ev.key === 'Enter') document.getElementById('go').click();
