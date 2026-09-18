@@ -57,7 +57,10 @@ window.RVT = {
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
     (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', c.META_PIXEL); fbq('track', 'PageView'); fbq('track', 'ViewContent');
+    fbq('init', c.META_PIXEL); fbq('track', 'PageView');
+    /* ViewContent NAO dispara aqui. Junto do PageView ele seria o mesmo
+       evento com dois nomes. Ele sai aos 50% de rolagem, la embaixo,
+       onde passa a significar 'essa pessoa leu a pagina'. */
   }
   if (c.GA4) {
     var g = document.createElement('script');
@@ -699,6 +702,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var sec = last && last.closest ? last.closest('header, section') : null;
     // so a primeira classe: 'hero' ou 'code', sem as utilitarias da animacao
     dl('form_open', { cta_local: sec ? (String(sec.className).split(' ')[0] || sec.tagName.toLowerCase()) : 'desconhecido' });
+    // Evento personalizado de proposito: nao existe evento padrao do Meta
+    // para 'abriu um formulario', e usar InitiateCheckout aqui envenenaria
+    // o funil da loja depois, que vai usar este mesmo pixel.
+    if (window.fbq) fbq('trackCustom', 'FormularioAberto', {
+      cta_local: sec ? (String(sec.className).split(' ')[0] || sec.tagName.toLowerCase()) : 'desconhecido'
+    });
     setTimeout(function(){ document.getElementById('nome').focus(); }, 60);
   }
   function close(){
@@ -804,7 +813,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       if (window.fbq) {
         fbq('track', 'Lead', {content_name: 'Grupo VIP Pepti Code'}, {eventID: eventId});
-        fbq('track', 'CompleteRegistration', {}, {eventID: eventId + '-cr'});
       }
       if (window.gtag) { gtag('event', 'generate_lead'); gtag('event', 'sign_up'); }
 
@@ -840,7 +848,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var pct = ((window.pageYOffset || document.documentElement.scrollTop) / h) * 100;
       for (var i = 0; i < marcos.length; i++) {
         var m = marcos[i];
-        if (pct >= m && !vistos[m]) { vistos[m] = 1; dl('scroll_depth', { profundidade: m }); }
+        if (pct >= m && !vistos[m]) {
+          vistos[m] = 1;
+          dl('scroll_depth', { profundidade: m });
+          // metade da pagina lida: agora ViewContent significa alguma coisa
+          if (m === 50 && window.fbq) fbq('track', 'ViewContent', { content_name: 'LP Grupo VIP Pepti Code' });
+        }
       }
     }
     window.addEventListener('scroll', function () {
