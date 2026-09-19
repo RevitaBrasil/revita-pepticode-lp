@@ -1,7 +1,7 @@
 # Revita Derma · Pepti Code — LP do grupo VIP
 
 Landing page de captação para o encontro de pré-lançamento do **Pepti Code**,
-dia **24/09 às 20h**. Arquivo único e autocontido: `index.html`.
+dia **29/09 às 20h**. Arquivo único e autocontido: `index.html`.
 
 ## No ar
 
