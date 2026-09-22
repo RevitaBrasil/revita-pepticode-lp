@@ -21,6 +21,11 @@ window.RVT = {
          sozinho assim que o endereço existir. */
   ENDPOINT: 'https://xejbwyrqgktrqhhtavdh.supabase.co/functions/v1/captura-lead',
 
+  /* 3 · Webhook do n8n que alimenta a Brevo, pedido pela Sarah.
+         Sai do navegador junto com o ENDPOINT, nao depois dele: um
+         nao espera o outro. O n8n ja responde CORS para este dominio. */
+  WEBHOOK_BREVO: 'https://n8n.vermefree.com.br/webhook/revitaderma-inscricoes-brevo',
+
   /* 3 · rastreamento DA REVITA. Nunca os IDs da Botanika: rodar skincare
          no pixel dela contamina o aprendizado das duas contas. */
   META_PIXEL: '1130249139559229',
@@ -623,10 +628,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var EVENTO = new Date(C.EVENTO || '2026-09-29T20:00:00-03:00');
   var GRUPO_WHATSAPP = C.GRUPO_WHATSAPP || '';
   var ENDPOINT = C.ENDPOINT || '';
+  var WEBHOOK_BREVO = C.WEBHOOK_BREVO || '';
 
   if (!GRUPO_WHATSAPP) console.warn('[RVT] falta GRUPO_WHATSAPP');
   if (!ENDPOINT)       console.warn('[RVT] falta ENDPOINT — leads ficam na fila local');
   if (!C.META_PIXEL)   console.warn('[RVT] falta META_PIXEL');
+  if (!WEBHOOK_BREVO)  console.warn('[RVT] falta WEBHOOK_BREVO — lead nao vai para a Brevo');
 
   /* ---- envio do lead, com fila local de segurança ------------------
      Regra: uma falha de webhook nunca pode impedir a lead de chegar ao
@@ -648,6 +655,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r;
     }, function (e) { clearTimeout(t); throw e; });
+  }
+
+  /* ---- Brevo, pelo n8n -------------------------------------------
+     Dispara junto com o ENDPOINT e nunca bloqueia nada: se falhar, a
+     lead ja esta no Supabase e a tela de sucesso aparece do mesmo
+     jeito. O resultado vai para o dataLayer, que e como a gente
+     enxerga se esta funcionando de verdade la fora.                  */
+  function enviarBrevo(l) {
+    if (!WEBHOOK_BREVO) return;
+    var partes = l.nome.split(' ').filter(Boolean);
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 6000);
+    fetch(WEBHOOK_BREVO, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({
+        email: l.email,
+        nome: l.nome,
+        primeiro_nome: partes[0] || '',
+        sobrenome: partes.length > 1 ? partes.slice(1).join(' ') : '',
+        whatsapp: l.whatsapp,
+        whatsapp_digitos: l.whatsapp.replace(/\D/g, ''),
+        origem: l.origem,
+        evento: l.evento,
+        pagina: l.pagina,
+        event_id: l.event_id,
+        utm_source: new URLSearchParams(l.utm).get('utm_source') || '',
+        utm_medium: new URLSearchParams(l.utm).get('utm_medium') || '',
+        utm_campaign: new URLSearchParams(l.utm).get('utm_campaign') || '',
+        utm_content: new URLSearchParams(l.utm).get('utm_content') || '',
+        utm_term: new URLSearchParams(l.utm).get('utm_term') || ''
+      })
+    }).then(function (r) {
+      clearTimeout(t);
+      dl('brevo_envio', { ok: r.ok, status: r.status });
+    })['catch'](function (e) {
+      clearTimeout(t);
+      dl('brevo_envio', { ok: false, status: 0, erro: String(e && e.name || e) });
+    });
   }
 
   function guardar(l) {
@@ -826,6 +874,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       btn.disabled = false;
       btn.textContent = 'Entrar no grupo VIP';
     }
+
+    enviarBrevo(lead);
 
     enviar(lead).then(
       function () { concluir(true); },
