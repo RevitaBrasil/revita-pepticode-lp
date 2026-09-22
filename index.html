@@ -618,7 +618,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="seal" aria-hidden="true">&#10003;</div>
       <h2>Sua vaga está garantida</h2>
       <p>Falta um passo: entre no grupo do WhatsApp para receber o link do encontro do dia 29/09.</p>
-      <a class="submit golink" id="golink" href="#" target="_blank" rel="noopener">Abrir o grupo no WhatsApp</a>
+      <a class="submit golink" id="golink" href="#" rel="noopener">Abrir o grupo no WhatsApp</a>
     </div>
   </div>
 </div>
@@ -872,6 +872,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         evento: lead.evento,
         enviado: !!enviado
       }, utms()));
+
+      // A pessoa nao precisa clicar em nada: a tela de sucesso aparece,
+      // e a pagina leva ela para o grupo sozinha. A espera e de proposito
+      // — da tempo do Lead do pixel e das tags do GTM sairem antes de
+      // trocar de pagina, e a confirmacao fica legivel por um instante.
+      // Navegacao na mesma aba, nao window.open: popup sem toque da
+      // pessoa o navegador bloqueia. O botao continua na tela como
+      // plano B, para quem voltar ou tiver a navegacao interrompida.
+      if (GRUPO_WHATSAPP) {
+        setTimeout(function () { window.location.href = GRUPO_WHATSAPP; }, 1500);
+      }
 
       btn.disabled = false;
       btn.textContent = 'Entrar no grupo VIP';
