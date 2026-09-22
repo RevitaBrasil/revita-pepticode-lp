@@ -13,10 +13,14 @@
      página continua funcionando sem quebrar nada.                      -->
 <script>
 window.RVT = {
-  /* 1 · link do grupo de WhatsApp. Nao e um convite direto: e o
-         redirecionador que distribui a pessoa entre os grupos abertos,
-         entao continua valendo quando um grupo lota. */
-  GRUPO_WHATSAPP: 'https://l.revitaderma.com.br/revitaderma-grupos',
+  /* 1 · grupos de WhatsApp. Convite direto de proposito: passar por
+         encurtador punha uma tela de "selecione seu dispositivo" entre
+         a pessoa e o grupo. Quando abrir o grupo #2, e so acrescentar
+         o endereco na lista — a pagina sorteia entre os que estiverem
+         aqui, e os grupos enchem juntos em vez de um de cada vez. */
+  GRUPOS_WHATSAPP: [
+    'https://chat.whatsapp.com/Gb5j3nl2vX47gSaZ3c9vkm'  /* #1 PRE-LANCAMENTO PEPTICODE */
+  ],
 
   /* 2 · webhook que recebe o lead (ActiveCampaign, SendFlow ou n8n).
          Enquanto vazio, o lead fica guardado no navegador e é reenviado
@@ -628,11 +632,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* valores em window.RVT, no topo do arquivo */
   var C = window.RVT || {};
   var EVENTO = new Date(C.EVENTO || '2026-09-29T20:00:00-03:00');
-  var GRUPO_WHATSAPP = C.GRUPO_WHATSAPP || '';
+  // Sorteia um grupo no carregamento da pagina. Com um endereco so na
+  // lista, isso e o mesmo que apontar direto para ele. GRUPO_WHATSAPP
+  // continua aceito por compatibilidade, caso alguem volte a usar um
+  // valor unico.
+  var GRUPOS = (C.GRUPOS_WHATSAPP || []).filter(Boolean);
+  var GRUPO_WHATSAPP = GRUPOS.length
+    ? GRUPOS[Math.floor(Math.random() * GRUPOS.length)]
+    : (C.GRUPO_WHATSAPP || '');
   var ENDPOINT = C.ENDPOINT || '';
   var WEBHOOK_BREVO = C.WEBHOOK_BREVO || '';
 
-  if (!GRUPO_WHATSAPP) console.warn('[RVT] falta GRUPO_WHATSAPP');
+  if (!GRUPO_WHATSAPP) console.warn('[RVT] falta GRUPOS_WHATSAPP');
   if (!ENDPOINT)       console.warn('[RVT] falta ENDPOINT — leads ficam na fila local');
   if (!C.META_PIXEL)   console.warn('[RVT] falta META_PIXEL');
   if (!WEBHOOK_BREVO)  console.warn('[RVT] falta WEBHOOK_BREVO — lead nao vai para a Brevo');
