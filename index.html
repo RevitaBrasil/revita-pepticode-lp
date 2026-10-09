@@ -36,6 +36,15 @@ window.RVT = {
          no pixel dela contamina o aprendizado das duas contas. */
   META_PIXEL: '1130249139559229',
 
+  /* 3b · segundo pixel do Meta, pedido pelo Pedro em 09/10.
+          ATENCAO: este ID nao pertence a nenhum portfolio da Revita. A
+          API do Meta responde "Invalid dataset_id" para ele com a conta
+          do Pedro. O que esta pagina coletar aqui vai para o Events
+          Manager de outra pessoa e nao volta como publico nem como
+          otimizacao para nos. O Pedro foi avisado e mandou instalar.
+          Esvaziar este campo desliga, sem mexer em mais nada.        */
+  META_PIXEL_2: '2160959408631121',
+
   /* 4 · Google Tag Manager. O GA4 NÃO vai aqui embaixo: configure o GA4
          dentro do container. Se ficar nos dois lugares, cada pageview é
          contado duas vezes. Mesma regra vale para o pixel do Meta — ele
@@ -68,7 +77,9 @@ window.RVT = {
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
     (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', c.META_PIXEL); fbq('track', 'PageView');
+    fbq('init', c.META_PIXEL);
+    if (c.META_PIXEL_2) fbq('init', c.META_PIXEL_2);
+    fbq('track', 'PageView');
     /* ViewContent NAO dispara aqui. Junto do PageView ele seria o mesmo
        evento com dois nomes. Ele sai aos 50% de rolagem, la embaixo,
        onde passa a significar 'essa pessoa leu a pagina'. */
@@ -615,7 +626,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <button class="submit" id="go">Entrar no grupo VIP</button>
-      <p class="privacy">Seus dados ficam com a Revita Derma e são usados só para avisar sobre o lançamento.</p>
+      <p class="privacy">Seus dados são usados para avisar sobre o lançamento. A página usa pixels de publicidade da Meta.</p>
     </div>
 
     <div class="done" id="doneView">
