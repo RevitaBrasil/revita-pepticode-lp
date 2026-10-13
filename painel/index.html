@@ -4,126 +4,192 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#F6F1EC">
+<meta name="theme-color" content="#070F26">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Painel Revita">
+<meta name="format-detection" content="telephone=no">
 <title>Painel Revita · Captação</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Marcellus&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* Design system Revita Derma (mesmo da LP): navy profundo + ouro + porcelana.
+   Layout: dobra navy com o número principal, corpo porcelana em cartões finos. */
 :root{
-  --bg:#F6F1EC;--card:#FFFFFF;--ink:#2A211D;--muted:#86766C;--line:#EADFD6;
-  --accent:#B5655A;--accent-soft:#F1DDD7;--ok:#4E8A6A;--warn:#B98A2E;--bar:#D7A79E;
+  --navy-900:#070F26; --navy-800:#0D1B3E; --navy-600:#1B3068; --navy-glass:#2B4A96;
+  --gold:#C6A55C; --gold-soft:#E3D2A8;
+  --porcelain:#F4F1EC; --porcelain-dim:#DCD6CC; --paper:#FBF9F5;
+  --ink:#1A1A18; --ink-2:#3A3A36; --muted:#7A766C; --line:#E4DED3;
+  --ok:#3F7A5C;
+  --f-display:'Marcellus',Georgia,serif;
+  --f-wish:'Cormorant Garamond',Georgia,serif;
+  --f-body:'Karla',system-ui,-apple-system,sans-serif;
+  --gutter:clamp(16px,5vw,28px);
 }
-@media (prefers-color-scheme:dark){:root{
-  --bg:#171311;--card:#211B18;--ink:#F3ECE6;--muted:#A8978C;--line:#342A25;
-  --accent:#E09A8E;--accent-soft:#3A2622;--ok:#7CC09A;--warn:#E0B45A;--bar:#8E5C54;
-}}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;
-  font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased;
-  padding:max(16px,env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom))}
-.wrap{max-width:720px;margin:0 auto}
-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}
-.brand{font-family:Fraunces,serif;font-weight:600;font-size:22px;letter-spacing:-.01em}
-.brand small{display:block;font-family:Inter;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-.live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;padding-top:6px}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:p 2s infinite}
-.dot.off{background:var(--warn);animation:none}
-@keyframes p{0%{box-shadow:0 0 0 0 rgba(78,138,106,.5)}70%{box-shadow:0 0 0 8px rgba(78,138,106,0)}100%{box-shadow:0 0 0 0 rgba(78,138,106,0)}}
-.hero{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;margin-bottom:12px}
-.hero .lbl{font-size:13px;color:var(--muted);font-weight:500}
-.hero .big{font-family:Fraunces,serif;font-size:56px;line-height:1;font-weight:600;letter-spacing:-.02em;margin:8px 0 6px;font-variant-numeric:tabular-nums}
-.hero .sub{font-size:13px;color:var(--muted)}
-.hero .sub b{color:var(--ink);font-weight:600}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.k{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-.k .lbl{font-size:12px;color:var(--muted);font-weight:500}
-.k .v{font-family:Fraunces,serif;font-size:28px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
-.k .d{font-size:12px;color:var(--muted);margin-top:2px}
-.up{color:var(--ok)!important}
-h2{font-family:Fraunces,serif;font-weight:600;font-size:18px;margin:0 0 10px}
-section{margin-bottom:26px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-.ev{padding:14px 0;border-bottom:1px solid var(--line)}
-.ev:first-child{padding-top:0}.ev:last-child{border-bottom:0;padding-bottom:0}
-.ev-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
-.ev-h .t{font-weight:600}
-.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
-.tag.past{background:var(--line);color:var(--muted)}
-.funnel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.f{text-align:left}
-.f .n{font-family:Fraunces,serif;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
-.f .l{font-size:11px;color:var(--muted)}
-.f.na .n{color:var(--muted)}
-.track{height:6px;border-radius:99px;background:var(--line);margin-top:10px;overflow:hidden;display:flex}
+html{-webkit-text-size-adjust:100%;background:var(--navy-900)}
+body{background:var(--porcelain);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;min-height:100vh;
+  padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+/* ---- barra fixa ---- */
+.bar{position:sticky;top:0;z-index:20;background:var(--navy-900);color:var(--gold-soft);
+  border-bottom:1px solid rgba(198,165,92,.28);padding-top:env(safe-area-inset-top,0px)}
+.bar-in{max-width:640px;margin:0 auto;padding:0 var(--gutter);height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mark{display:flex;align-items:baseline;gap:9px;min-width:0}
+.mark b{font-family:var(--f-display);font-weight:400;font-size:17px;letter-spacing:.2em;color:var(--porcelain);white-space:nowrap}
+.mark small{font-size:8.5px;letter-spacing:.42em;color:var(--gold);white-space:nowrap}
+.live{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.04em;color:rgba(227,210,168,.75);
+  min-height:44px;padding:0 2px 0 10px;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s ease-out infinite}
+.dot.off{background:#9A7B5A;animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(198,165,92,.6)}75%{box-shadow:0 0 0 9px rgba(198,165,92,0)}100%{box-shadow:0 0 0 0 rgba(198,165,92,0)}}
+.live.spin .dot{animation:none;background:var(--gold-soft)}
+
+/* ---- dobra navy ---- */
+.hero{background:radial-gradient(120% 90% at 10% 0%,#16295C 0%,rgba(22,41,92,0) 62%),linear-gradient(170deg,var(--navy-800) 0%,var(--navy-900) 75%);
+  color:var(--porcelain);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;left:var(--gutter);right:var(--gutter);bottom:0;height:1px;
+  background:linear-gradient(90deg,rgba(198,165,92,0),rgba(198,165,92,.55),rgba(198,165,92,0))}
+.hero-in{max-width:640px;margin:0 auto;padding:28px var(--gutter) 30px}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);
+  border-bottom:1px solid rgba(198,165,92,.4);padding-bottom:6px}
+.total{font-family:var(--f-display);font-weight:400;font-size:clamp(64px,21vw,104px);line-height:.95;color:#fff;margin:18px 0 6px;letter-spacing:-.01em}
+.total-cap{font-family:var(--f-wish);font-style:italic;font-weight:500;font-size:21px;color:var(--gold-soft);line-height:1.2}
+.total-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-size:13px;color:rgba(244,241,236,.6)}
+.total-meta b{color:#fff;font-weight:500}
+.delta{color:var(--gold);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr;margin-top:24px;border-top:1px solid rgba(198,165,92,.22)}
+.kpi{padding:16px 0 4px}
+.kpi:nth-child(odd){padding-right:14px;border-right:1px solid rgba(198,165,92,.22)}
+.kpi:nth-child(even){padding-left:16px}
+.kpi:nth-child(n+3){border-top:1px solid rgba(198,165,92,.22);padding-top:16px}
+.kpi .l{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(227,210,168,.7)}
+.kpi .v{font-family:var(--f-display);font-size:32px;line-height:1.1;color:#fff;margin-top:4px}
+.kpi .d{font-size:12px;color:rgba(244,241,236,.5);margin-top:2px;min-height:18px}
+
+/* ---- corpo porcelana ---- */
+main{max-width:640px;margin:0 auto;padding:28px var(--gutter) 0;display:grid;gap:30px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+h2{font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.15;color:var(--navy-800);text-wrap:balance}
+h2 em{font-family:var(--f-wish);font-style:italic;font-weight:600;color:var(--navy-600);font-size:1.08em}
+.sec-h small{font-size:12px;color:var(--muted);white-space:nowrap}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:18px}
+
+/* eventos */
+.ev+.ev{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.ev-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.ev-name{font-family:var(--f-display);font-size:19px;color:var(--navy-800)}
+.pill{font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:2px;white-space:nowrap;
+  background:var(--navy-800);color:var(--gold-soft)}
+.pill.past{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.funnel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.f .n{font-family:var(--f-display);font-size:26px;line-height:1.1;color:var(--ink)}
+.f .l{font-size:12px;color:var(--muted);line-height:1.3;margin-top:2px}
+.f.na .n{color:var(--porcelain-dim)}
+.track{height:3px;background:var(--line);margin-top:14px;display:flex;overflow:hidden}
 .track i{display:block;height:100%}
-.note{font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:12px;padding:10px 12px;margin-top:12px;line-height:1.45}
-.note b{color:var(--ink)}
-.chart{width:100%;height:150px;display:block}
-.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
-.cap{font-size:12px;color:var(--muted);margin-top:8px}
-.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
-.row:last-child{border-bottom:0}
-.row .nm{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .nm small{display:block;color:var(--muted);font-size:11px}
-.row .ct{font-weight:600;font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}
-.meter{height:4px;background:var(--line);border-radius:99px;margin-top:6px;overflow:hidden}
-.meter i{display:block;height:100%;background:var(--bar)}
-footer{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
-.err{display:none;font-size:12px;color:var(--warn);text-align:center;margin-bottom:12px}
-.skel .big,.skel .v,.skel .n{color:transparent;background:var(--line);border-radius:8px}
+.today{font-size:12px;color:var(--ok);font-weight:600;margin-top:8px}
+.note{margin-top:14px;padding:14px 16px;background:var(--navy-900);color:rgba(244,241,236,.75);font-size:13.5px;line-height:1.5;border-left:2px solid var(--gold)}
+.note b{color:var(--gold-soft);font-weight:500}
+
+/* gráficos */
+.chart{position:relative}
+.chart svg{width:100%;height:140px;display:block;touch-action:pan-y}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.03em}
+.readout{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.readout b{font-family:var(--f-display);font-weight:400;font-size:20px;color:var(--navy-800)}
+
+/* campanhas */
+.row{padding:12px 0}
+.row+.row{border-top:1px solid var(--line)}
+.row-t{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.row .nm{font-size:14px;color:var(--ink-2);min-width:0;overflow-wrap:anywhere;line-height:1.35}
+.row .ct{font-family:var(--f-display);font-size:19px;color:var(--navy-800);white-space:nowrap}
+.row .src{font-size:12px;color:var(--muted);margin-top:2px}
+.meter{height:3px;background:var(--line);margin-top:8px}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold))}
+
+.err{display:none;margin:12px var(--gutter) 0;font-size:13px;color:var(--navy-600);text-align:center}
+footer{max-width:640px;margin:30px auto 0;padding:0 var(--gutter);text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.03em}
+footer .rule{width:44px;height:1px;background:var(--gold);margin:0 auto 12px;opacity:.7}
+
+.skel .total,.skel .kpi .v,.skel .f .n{color:transparent!important;background:rgba(198,165,92,.14);border-radius:2px}
+.skel main .f .n{background:var(--line)}
+
+@media (min-width:600px){
+  .total{font-size:112px}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .kpi,.kpi:nth-child(odd),.kpi:nth-child(even),.kpi:nth-child(n+3){padding:16px 14px 4px;border-top:0;border-right:1px solid rgba(198,165,92,.22)}
+  .kpi:first-child{padding-left:0}
+  .kpi:last-child{border-right:0}
+  .chart svg{height:170px}
+}
 </style>
 </head>
-<body>
-<div class="wrap skel" id="app">
-  <header>
-    <div class="brand">Revita Derma<small>Captação · Pepti-Code</small></div>
-    <div class="live"><span class="dot" id="dot"></span><span id="upd">conectando…</span></div>
-  </header>
-  <div class="err" id="err">Sem conexão agora. Tentando de novo…</div>
-
-  <div class="hero">
-    <div class="lbl">Leads no total (preencheram o formulário)</div>
-    <div class="big" id="total">0000</div>
-    <div class="sub" id="totalSub">&nbsp;</div>
+<body class="skel" id="app">
+<div class="bar">
+  <div class="bar-in">
+    <div class="mark"><b>REVITA</b><small>DERMA</small></div>
+    <button class="live" id="live" type="button" aria-label="Atualizar agora"><span class="dot" id="dot"></span><span id="upd">conectando…</span></button>
   </div>
+</div>
 
-  <div class="grid">
-    <div class="k"><div class="lbl">Hoje</div><div class="v" id="hoje">000</div><div class="d" id="hojeD">&nbsp;</div></div>
-    <div class="k"><div class="lbl">Última hora</div><div class="v" id="hora">00</div><div class="d" id="horaD">&nbsp;</div></div>
-    <div class="k"><div class="lbl">Ontem</div><div class="v" id="ontem">000</div><div class="d">dia inteiro</div></div>
-    <div class="k"><div class="lbl">Último lead</div><div class="v" id="ult" style="font-size:22px">--</div><div class="d" id="ultD">&nbsp;</div></div>
+<section class="hero">
+  <div class="hero-in">
+    <span class="eyebrow">Captação · Pepti-Code</span>
+    <div class="total num" id="total">0.000</div>
+    <div class="total-cap">inscritas na lista de espera</div>
+    <div class="total-meta" id="totalMeta"><span>&nbsp;</span></div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Hoje</div><div class="v num" id="hoje">000</div><div class="d" id="hojeD"></div></div>
+      <div class="kpi"><div class="l">Última hora</div><div class="v num" id="hora">00</div><div class="d" id="horaD"></div></div>
+      <div class="kpi"><div class="l">Ontem</div><div class="v num" id="ontem">000</div><div class="d">dia inteiro</div></div>
+      <div class="kpi"><div class="l">Último lead</div><div class="v num" id="ult">--:--</div><div class="d" id="ultD"></div></div>
+    </div>
   </div>
+</section>
+<div class="err" id="err">Sem conexão agora. Tentando de novo…</div>
 
+<main>
   <section>
-    <h2>Por grupo / evento</h2>
+    <div class="sec-h"><h2>Por <em>live</em></h2><small>formulário → grupo</small></div>
     <div class="card" id="eventos"></div>
-    <div class="note" id="grupoNote"><b>Entrada nos grupos ainda não é registrada.</b> O banco recebe quem preenche o formulário, mas ninguém está marcando quem entrou no grupo de WhatsApp. Por isso "não entraram" mostra todo mundo até essa integração existir.</div>
+    <div class="note" id="grupoNote"><b>A entrada nos grupos ainda não é registrada.</b> O banco recebe quem preenche o formulário, mas ninguém marca quem entrou no grupo de WhatsApp. "Entraram" e "não entraram" aparecem aqui assim que essa informação chegar.</div>
   </section>
 
   <section>
-    <h2>Ritmo nas últimas 36h</h2>
-    <div class="card">
-      <svg class="chart" id="cHora" preserveAspectRatio="none"></svg>
+    <div class="sec-h"><h2>Ritmo das <em>últimas 36h</em></h2><small>toque nas barras</small></div>
+    <div class="card chart">
+      <svg id="cHora" preserveAspectRatio="none" role="img" aria-label="Leads por hora nas últimas 36 horas"></svg>
       <div class="axis" id="aHora"></div>
-      <div class="cap" id="capHora"></div>
+      <div class="readout" id="rHora"></div>
     </div>
   </section>
 
   <section>
-    <h2>Leads por dia</h2>
-    <div class="card">
-      <svg class="chart" id="cDia" preserveAspectRatio="none"></svg>
+    <div class="sec-h"><h2>Leads <em>por dia</em></h2><small>últimos 21 dias</small></div>
+    <div class="card chart">
+      <svg id="cDia" preserveAspectRatio="none" role="img" aria-label="Leads por dia nos últimos 21 dias"></svg>
       <div class="axis" id="aDia"></div>
+      <div class="readout" id="rDia"></div>
     </div>
   </section>
 
   <section>
-    <h2>De onde vieram</h2>
+    <div class="sec-h"><h2>De onde <em>vieram</em></h2><small>por campanha</small></div>
     <div class="card" id="camp"></div>
   </section>
+</main>
 
-  <footer>Atualiza sozinho a cada 20 s · só números agregados, sem dados pessoais</footer>
-</div>
+<footer><div class="rule"></div>Atualiza sozinho a cada 20 segundos · só números, sem dados pessoais</footer>
 
 <script>
 const URL_API = "https://xejbwyrqgktrqhhtavdh.supabase.co/functions/v1/painel-leads";
@@ -131,112 +197,131 @@ const $ = id => document.getElementById(id);
 const fmt = n => (n ?? 0).toLocaleString("pt-BR");
 const tz = { timeZone: "America/Sao_Paulo" };
 const hhmm = d => new Date(d).toLocaleTimeString("pt-BR", { ...tz, hour: "2-digit", minute: "2-digit" });
-let prevTotal = null;
+const ddmm = t => t.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+const hh = t => String(t.getHours()).padStart(2, "0") + "h";
+const pad = n => String(n).padStart(2, "0");
+let prevTotal = null, lastData = null;
 
-function agoTxt(d){
+function ago(d){
   const s = Math.max(0, (Date.now() - new Date(d)) / 1000);
-  if (s < 60) return "agora há pouco";
+  if (s < 60) return "agora mesmo";
   if (s < 3600) return `há ${Math.floor(s/60)} min`;
   if (s < 86400) return `há ${Math.floor(s/3600)} h`;
   return `há ${Math.floor(s/86400)} dias`;
 }
-
-// "21/10 20h" -> Date do evento (ano corrente)
 function eventoData(nome){
   const m = /^(\d{2})\/(\d{2})\s+(\d{1,2})h/.exec(nome || "");
   if (!m) return null;
-  const ano = new Date().getFullYear();
-  return new Date(`${ano}-${m[2]}-${m[1]}T${m[3].padStart(2,"0")}:00:00-03:00`);
+  return new Date(`${new Date().getFullYear()}-${m[2]}-${m[1]}T${pad(m[3])}:00:00-03:00`);
 }
+function esc(s){ const el = document.createElement("span"); el.textContent = s ?? ""; return el.innerHTML; }
 
-function bars(svg, vals, color){
-  const W = 300, H = 150, n = vals.length || 1, max = Math.max(1, ...vals);
+// Barras com toque: mostra o valor da barra tocada no rodapé do cartão
+function bars(svgId, items, labelFn, readoutId, defaultIdx){
+  const svg = $(svgId), W = 320, H = 140, n = items.length, max = Math.max(1, ...items.map(i => i.n));
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const gap = n > 24 ? 1 : 3, bw = (W - gap * (n - 1)) / n;
-  svg.innerHTML = vals.map((v, i) => {
-    const h = v ? Math.max(2, v / max * (H - 4)) : 0;
-    return `<rect x="${(i*(bw+gap)).toFixed(2)}" y="${(H-h).toFixed(2)}" width="${bw.toFixed(2)}" height="${h.toFixed(2)}" rx="${Math.min(3,bw/2).toFixed(1)}" fill="${color}"/>`;
-  }).join("");
+  const gap = n > 24 ? 2 : 4, bw = (W - gap * (n - 1)) / n;
+  let html = "";
+  [.25,.5,.75].forEach(f => html += `<line x1="0" x2="${W}" y1="${H - f*(H-6)}" y2="${H - f*(H-6)}" stroke="#E4DED3" stroke-width="1" stroke-dasharray="2 4"/>`);
+  items.forEach((it, i) => {
+    const h = it.n ? Math.max(2, it.n / max * (H - 6)) : 0, x = i * (bw + gap);
+    html += `<rect data-i="${i}" x="${x.toFixed(2)}" y="0" width="${(bw+gap).toFixed(2)}" height="${H}" fill="transparent"/>`;
+    html += `<rect class="b" data-i="${i}" x="${x.toFixed(2)}" y="${(H-h).toFixed(2)}" width="${bw.toFixed(2)}" height="${h.toFixed(2)}" fill="${i === defaultIdx ? "#C6A55C" : "#1B3068"}" opacity="${i === defaultIdx ? 1 : .82}"/>`;
+  });
+  svg.innerHTML = html;
+  const show = i => {
+    svg.querySelectorAll(".b").forEach(b => { const on = +b.dataset.i === i; b.setAttribute("fill", on ? "#C6A55C" : "#1B3068"); b.setAttribute("opacity", on ? 1 : .82); });
+    $(readoutId).innerHTML = `<span>${labelFn(items[i])}</span><b class="num">${fmt(items[i].n)}</b>`;
+  };
+  const pick = e => {
+    const r = svg.getBoundingClientRect(), x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    show(Math.min(n - 1, Math.max(0, Math.floor(x / r.width * n))));
+  };
+  svg.onpointerdown = pick; svg.onpointermove = e => { if (e.pressure || e.pointerType === "mouse") pick(e); };
+  show(defaultIdx);
 }
 
 function render(d){
-  $("app").classList.remove("skel");
+  document.body.classList.remove("skel");
+  lastData = d;
+  const now = new Date();
   $("total").textContent = fmt(d.total);
   const dup = d.total - d.wpp_unicos;
-  $("totalSub").innerHTML = `<b>${fmt(d.wpp_unicos)}</b> WhatsApps únicos` + (dup > 0 ? ` · ${fmt(dup)} repetidos` : "") + (d.compradoras ? ` · <b>${fmt(d.compradoras)}</b> compradora${d.compradoras>1?"s":""}` : "");
-  if (prevTotal !== null && d.total > prevTotal) {
-    $("totalSub").innerHTML += ` · <span class="up">+${fmt(d.total - prevTotal)} agora</span>`;
-  }
+  let meta = `<span><b class="num">${fmt(d.wpp_unicos)}</b> WhatsApps únicos</span>`;
+  if (dup > 0) meta += `<span>${fmt(dup)} repetidos</span>`;
+  if (d.compradoras) meta += `<span><b class="num">${fmt(d.compradoras)}</b> compradora${d.compradoras > 1 ? "s" : ""}</span>`;
+  if (prevTotal !== null && d.total > prevTotal) meta += `<span class="delta">+${fmt(d.total - prevTotal)} agora</span>`;
+  $("totalMeta").innerHTML = meta;
   prevTotal = d.total;
 
   $("hoje").textContent = fmt(d.hoje);
   $("ontem").textContent = fmt(d.ontem);
   $("hora").textContent = fmt(d.ultima_hora);
-  const ritmo = d.ultima_hora;
-  $("horaD").textContent = ritmo ? `≈ ${(ritmo/60).toFixed(1).replace(".",",")} por minuto` : "parado";
-  const now = new Date(), minsHoje = now.getHours()*60 + now.getMinutes();
-  $("hojeD").textContent = d.hoje && minsHoje > 30 ? `≈ ${fmt(Math.round(d.hoje/(minsHoje/60)))} por hora` : " ";
-  if (d.ultimo_lead){ $("ult").textContent = hhmm(d.ultimo_lead); $("ultD").textContent = agoTxt(d.ultimo_lead); }
+  $("horaD").textContent = d.ultima_hora ? `≈ ${(d.ultima_hora/60).toFixed(1).replace(".", ",")} por min` : "sem cadastros";
+  const local = new Date(now.toLocaleString("en-US", tz)), mins = local.getHours()*60 + local.getMinutes();
+  $("hojeD").textContent = d.hoje && mins > 30 ? `≈ ${fmt(Math.round(d.hoje / (mins/60)))} por hora` : "";
+  if (d.ultimo_lead){ $("ult").textContent = hhmm(d.ultimo_lead); $("ultD").textContent = ago(d.ultimo_lead); }
 
-  // Eventos
-  const evs = (d.eventos || []).slice().sort((a,b) => (eventoData(b.evento)||0) - (eventoData(a.evento)||0));
-  const algumGrupo = evs.some(e => e.no_grupo > 0);
-  $("grupoNote").style.display = algumGrupo ? "none" : "block";
+  // Lives
+  const evs = (d.eventos || []).slice().sort((a,b) => (eventoData(b.evento) || 0) - (eventoData(a.evento) || 0));
+  const temGrupo = evs.some(e => e.no_grupo > 0);
+  $("grupoNote").style.display = temGrupo ? "none" : "block";
   $("eventos").innerHTML = evs.map(e => {
-    const dt = eventoData(e.evento), passado = dt && dt < now;
-    let tag = "";
+    const dt = eventoData(e.evento), passou = dt && dt < now;
+    let pill = "";
     if (dt){
-      const dias = Math.ceil((dt - now) / 86400000);
-      tag = passado ? `<span class="tag past">encerrado</span>` : `<span class="tag">${dias <= 0 ? "hoje" : dias === 1 ? "amanhã" : "em " + dias + " dias"}</span>`;
+      const dia0 = new Date(local); dia0.setHours(0,0,0,0);
+      const diaEv = new Date(dt.toLocaleString("en-US", tz)); diaEv.setHours(0,0,0,0);
+      const dias = Math.round((diaEv - dia0) / 86400000);
+      pill = passou ? `<span class="pill past">encerrada</span>` : `<span class="pill">${dias <= 0 ? "hoje" : dias === 1 ? "amanhã" : "em " + dias + " dias"}</span>`;
     }
     const nao = e.n - e.no_grupo, pG = e.n ? e.no_grupo / e.n * 100 : 0;
     return `<div class="ev">
-      <div class="ev-h"><span class="t">Live ${e.evento}</span>${tag}</div>
+      <div class="ev-h"><span class="ev-name">Live ${esc(e.evento)}</span>${pill}</div>
       <div class="funnel">
-        <div class="f"><div class="n">${fmt(e.n)}</div><div class="l">preencheram</div></div>
-        <div class="f ${algumGrupo?"":"na"}"><div class="n">${algumGrupo ? fmt(e.no_grupo) : "—"}</div><div class="l">entraram no grupo</div></div>
-        <div class="f ${algumGrupo?"":"na"}"><div class="n">${algumGrupo ? fmt(nao) : "—"}</div><div class="l">não entraram</div></div>
+        <div class="f"><div class="n num">${fmt(e.n)}</div><div class="l">preencheram</div></div>
+        <div class="f ${temGrupo ? "" : "na"}"><div class="n num">${temGrupo ? fmt(e.no_grupo) : "—"}</div><div class="l">entraram no grupo</div></div>
+        <div class="f ${temGrupo ? "" : "na"}"><div class="n num">${temGrupo ? fmt(nao) : "—"}</div><div class="l">não entraram</div></div>
       </div>
-      <div class="track"><i style="width:${pG}%;background:var(--ok)"></i><i style="flex:1;background:var(--bar);opacity:.55"></i></div>
-      ${e.hoje ? `<div class="cap">+${fmt(e.hoje)} hoje</div>` : ""}
+      <div class="track"><i style="width:${pG}%;background:var(--gold)"></i><i style="flex:1;background:var(--navy-600);opacity:.18"></i></div>
+      ${e.hoje ? `<div class="today">+${fmt(e.hoje)} hoje</div>` : ""}
     </div>`;
-  }).join("") || `<div class="cap">Sem leads ainda.</div>`;
+  }).join("") || `<div class="f l">Ainda sem cadastros.</div>`;
 
-  // Por hora (36h, preenche horas vazias)
-  const mapH = new Map((d.por_hora||[]).map(x => [x.h.slice(0,13), x.n]));
+  // Hora a hora (36h)
+  const mapH = new Map((d.por_hora || []).map(x => [x.h.slice(0, 13), x.n]));
+  const base = new Date(local); base.setMinutes(0, 0, 0);
   const horas = [];
-  const base = new Date(new Date().toLocaleString("en-US", tz)); base.setMinutes(0,0,0);
   for (let i = 35; i >= 0; i--){
-    const t = new Date(base.getTime() - i*3600000);
-    const key = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}T${String(t.getHours()).padStart(2,"0")}`;
-    horas.push({ t, n: mapH.get(key) || 0 });
+    const t = new Date(base.getTime() - i * 3600000);
+    horas.push({ t, n: mapH.get(`${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}T${pad(t.getHours())}`) || 0 });
   }
-  bars($("cHora"), horas.map(h => h.n), "var(--accent)");
-  const lab = t => `${String(t.getHours()).padStart(2,"0")}h`;
-  $("aHora").innerHTML = `<span>${lab(horas[0].t)}</span><span>${lab(horas[18].t)}</span><span>agora</span>`;
-  const pico = horas.reduce((a,b) => b.n > a.n ? b : a, horas[0]);
-  $("capHora").textContent = pico.n ? `Pico: ${fmt(pico.n)} leads às ${lab(pico.t)} de ${pico.t.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})}` : "";
+  const pico = horas.reduce((a, b, i) => b.n > horas[a].n ? i : a, 0);
+  bars("cHora", horas, it => `${ddmm(it.t)} · ${hh(it.t)} às ${pad((it.t.getHours()+1)%24)}h${horas.indexOf(it) === pico && it.n ? " · pico" : ""}`, "rHora", pico);
+  $("aHora").innerHTML = `<span>${hh(horas[0].t)}</span><span>${hh(horas[18].t)}</span><span>agora</span>`;
 
-  // Por dia (21 dias)
-  const mapD = new Map((d.por_dia||[]).map(x => [x.dia, x.n]));
+  // Por dia (21)
+  const mapD = new Map((d.por_dia || []).map(x => [x.dia, x.n]));
   const dias = [];
   for (let i = 20; i >= 0; i--){
-    const t = new Date(base.getTime() - i*86400000);
-    const key = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
-    dias.push({ t, n: mapD.get(key) || 0 });
+    const t = new Date(base.getTime() - i * 86400000);
+    dias.push({ t, n: mapD.get(`${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`) || 0 });
   }
-  bars($("cDia"), dias.map(x => x.n), "var(--bar)");
-  const ld = t => t.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
-  $("aDia").innerHTML = `<span>${ld(dias[0].t)}</span><span>${ld(dias[10].t)}</span><span>hoje</span>`;
+  bars("cDia", dias, it => it === dias[20] ? `Hoje, ${ddmm(it.t)}` : it.t.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" }), "rDia", 20);
+  $("aDia").innerHTML = `<span>${ddmm(dias[0].t)}</span><span>${ddmm(dias[10].t)}</span><span>hoje</span>`;
 
   // Campanhas
   const cs = d.campanhas || [], maxC = Math.max(1, ...cs.map(c => c.n));
-  $("camp").innerHTML = cs.map(c => `<div class="row"><div class="nm" style="flex:1">${esc(c.campanha)}<small>${esc(c.origem)} · ${(c.n/d.total*100).toFixed(1).replace(".",",")}%</small><div class="meter"><i style="width:${c.n/maxC*100}%"></i></div></div><div class="ct">${fmt(c.n)}</div></div>`).join("");
+  $("camp").innerHTML = cs.map(c => `<div class="row">
+      <div class="row-t"><span class="nm">${esc(c.campanha)}</span><span class="ct num">${fmt(c.n)}</span></div>
+      <div class="src">${esc(c.origem)} · ${(c.n / d.total * 100).toFixed(1).replace(".", ",")}%</div>
+      <div class="meter"><i style="width:${c.n / maxC * 100}%"></i></div>
+    </div>`).join("");
 }
 
-function esc(s){ const el = document.createElement("span"); el.textContent = s ?? ""; return el.innerHTML; }
-
+let loading = false;
 async function load(){
+  if (loading) return; loading = true; $("live").classList.add("spin");
   try{
     const r = await fetch(URL_API, { cache: "no-store" });
     if (!r.ok) throw new Error(r.status);
@@ -247,10 +332,12 @@ async function load(){
   }catch(e){
     $("err").style.display = "block"; $("dot").classList.add("off");
     $("upd").textContent = "reconectando";
-  }
+  }finally{ loading = false; $("live").classList.remove("spin"); }
 }
+$("live").addEventListener("click", load);
 load();
-setInterval(load, 20000);
+setInterval(() => { if (!document.hidden) load(); }, 20000);
+setInterval(() => { if (lastData?.ultimo_lead) $("ultD").textContent = ago(lastData.ultimo_lead); }, 15000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
 </script>
 </body>
